@@ -1,0 +1,116 @@
+Disks and filesystem
+Partition are subdivision of the whole disk. The partition is defined on a small area of the disk called a partition Table. Multiple data partitions were once on system with large disks because older PCs could boot only from certain parts of the disk. Also, administrators used partitions to reserve a certain amount of space for operating system area.
+Although the kernel makes it possible for you to access both an entire disk and one of its partitions at the same time, you would not normally do so, unless you were copying the entire disk. The next layer after the partition is the filesystem.
+Partitioning disk devices
+There are many kinds of portioning table. The traditional table is the one found inside the master boot record(MBR). A newer standard starting to gain traction is the Globally unique identifier partition Table (GPT)
+The Linux partition tools available.
+Parted: A text-based tool that support both MBR &GRP.
+gparted: A graphical version of the parted. 
+Fdisk: the traditional text-base linux disk partitioning tool. 
+Fdisk does not support gpt.
+Gdisk: a version of fdisk that support GPT but not MBR.
+Partition table defines simple boundaries on the disk, whereas a filesystem is a much more involved data system.
+A primary partition is a normal subdivision of the disk; partition 1 is such a partition. The basic MBR has a limit of four primary partitions, so if you want more than four, you designate one partition as a extended partition. Next you subdivided the extended partition into logical partitions that the operating system can use as it would any other partition.
+Initial Kernel Read.
+When initially reading the MBR table, the Linux kernel produces the following debugging output (remember that you can view this with dmesg):
+Sda:sda1,sda2 < sda5>
+The sda2< sda5> output indicates that /dev/sda5.
+Use udevadm to watch the karnel changes
+Check /proc/partitions for full partition information
+Check /sys/block/device/ for altered partition system
+Interfaces or /dev for altered partition devices.
+Solid-state disk (ssDs)
+Storage device with no moving parts, such as spinning disks in terms of their access characteristic.
+For these, random access is not a problem because there’s no head to sweep across a platter, but certain factors affect performance.
+One of the most significant factor affecting the performance of ssDs is partition alignment. When you read data from an SSDs, you read it in chunks-typically 4096 bytes at a time-and the read must begin at a multiple of that same size. So, if your partition and its data do not lie on 4096 -byte boundary. you may have to do two reads instead of one for small, common operation, such as reading the contents of a directory.
+If you’re curious about where your partition begins and just want to make sure that they begin on a boundary, you can easily find this information by looking in /sys/block. Here’s an example for a partition /def/sdfs.
+$cat /sys/block/sdf/sdf2/start 1953126.
+Filesystems
+The last link between the kernel and user space for disks is typically the filesystem, this is what you’re accustomed to interacting with when you run commands, such as ls and cd. As previous mentioned, the filesystem is a form of database; it supplies the structure to transform a simple block device into the sophisticated hierarchy of files and subdirectories that can understand.
+Filesystem types
+The following list includes the most common types of filesystems for data storage. The type names as recognized by linux are parentheses next to the filesystem names.
+The fourth extended filesystem(ext4) is the current iteration of a line of filesystems native to linux.
+Iso 9660(iso9660) is a CD-Rom standard. Most CD-Rom used some variety of the iso9660 standard.
+FAT filesystems (msdos, vfat, umsdos) partition to Microsoft system for most modern windows filesystems, you should use the vfat filesystem in order to get full access from Linux.
+HFSt (hfsplus) is an Apple standard used on most Macintosh systems.
+Creating a filesystem
+The mkfs utility can create many kinds of filesystems. For example, you can create an ext4 partition on /dev/sdf2 with this command: #mkfs-t ext4 /dev/sdf2
+The mkfs program automatically determine the number of blocks in a device and set some reasonable default. Unless you really know what, you’re doing and feel like reading the documentation in detail, don’t change this.
+Mounting a filesystem.
+On unix, the process of attaching a filesystem is called mounting. When the system boots, the kernel read some configuration data and mounts root (/) based on the configuration data.
+In order to mount a filesystem, you must know the following.
+The filesystem’s device (such as a disk partition; where the actual filesystem data resides).
+The filesystem types
+The mount point-that is the place in the current system’s directory hierarchy where the filesystem will be attached. The mount point need not be directly below /, it may be anywhere on the system.
+When mounting a filesystem, the common terminology is “Mount a device on a mount point.” To learn the current filesystem status of your system, run mount. 
+To mount a filesystem, use the mount command as follows with the filesystem type, device, and desired mount point.
+#mount-t type device mount point
+For example, to mount the fourth extended filesystem /dev sdf2 on /home/extro, use this command,
+# 
+Mount-t ext4 /dev/sdf2 /home/extro.
+Disk Buffering caching, and filesystem
+Linux, like other versions of unix, buffers write to the disk. This means that the kernel usually doesn’t immediately write changes to filesystem when processes request changes. Instead it store the changes in RAM until the kernel can conveniently make the actual change to the disk.
+When you unmount a filesystem with unmount, the kernel automatically synchronizes with the disk.
+The /etc/fstab filesystem table
+To mount filesystem at boot time and take the drudgery out of the mount command, linux systems keep a permanent list of filesystem and options in /etc/fstab.
+Alternate to /etc/fstab
+Although to /etc/fstab file has been the traditional way to represent filesystem and their mount points, two new alternatives have appeared. The first is an /etc/fstab.d directory that contains individual filesystem configuration files.
+A second alternative is to configure system d unit for the filesystems.
+$df command is to view the size and utilization of your currently mounted filesystems.
+The tool to check a filesystem is fsck
+If fsck finds a problem in manual mode, it stops and asks you a question relevant to fixing the problem.
+The worst case
+Disk problem that are worst in severity leave you with few choices:
+a.	You can try to extract the entire filesystem image from the disk with old and transfer it to a partition on another disk of the same size.
+b.	You can try to patch the filesystem as much as possible, mount it in read-only mode, and salvage it.
+c.	The debugfs tool allows you to look through the files on a filesystem and copy them elsewhere.
+Special -purpose filesystem
+Proc: mounted on /sys
+Tmpfs: mounted on /run and other location with tmpfs, you can use your physical memory and swap space as temporary storage.
+Swap space
+Not every partition on a disk contains a filesystem. It’s also possible to augment the RAM on a machine with disk space.
+If you run out of real memory, the linux virtual memory system can automatically move piece of memory to a disk storage. The disk area used to store memory page is called swap space ( or just swap for short).
+
+Chapter 5
+How the linux kernel boots.
+Traditional unix systems produce many diagnostic messages upon boot that tell you about the boot process. The messages come first from the kernel and  then from process and initialization procedures that unit starts.
+There are two ways to view the kernel’s boot and running diagnostic message. 
+You can:
+a.	Look at the kernel system log file. You’ll often find this in /var/log/kern.log
+b.	Use the dmesg command, but be sure to pipe the output to less because there will be much more than a screen’s worth.
+Kernel initialization and boot options.
+       Upon startup, the linux kernel initializes in this general order:
+a.	CPU inspection
+b.	Memory inspection
+c.	Device bus discovery
+d.	Device discovery]
+e.	Auxiliary kernel subsystem setup (networking, and so on)
+f.	Root filesystem mount
+g.	User space start
+
+The first steps aren’t too remarkable, but whom the kernel gets to devices, a question of dependencies arises. For example, the disk device driver may depend on bus support and scsi subsystem support. Later in the initialization process, the kernel must mount a root file-system before starting init.
+Kernel Parameters
+When running the linux kernel, the boot loader passes in a set of text-based kernel parameters that tell the kernel how it should start. The parameter specifies many different types of behavior, such as the amount of diagnostic output the kernel should produce and device driver-specific options. You can view the kernel parameters from your system’s boot by looking at the /proc/cmdline files.
+$cat /proc/cmdline
+The root filesystem can be specified as a device file, such as in this example root= /dev/sda1
+
+Boot loaders.
+At the start of the boot process, before the kernel and init start, a boot loader starts the kernel. The task of a boot loader sound simple: it loads the kernel into memory, and then starts the kernel with a set of kernel parameter. But consider the question that the boot loader must answer:
+Where is the kernel.
+What kernel parameter should be passed to the kernel when it starts?
+The answers are (typically) that the kernel and its parameters are usually somewhere on the root filesystem. It sounds like the kernel parameter should be easy to find, except that the kernel is not yet running, so it can’t traverse a filesystem to find the necessary file.
+Boot loader Tasks
+A Linux boot loader’s care functionality include the ability to do the following.
+1.	Select among multiple kernels
+2.	Switch between sets of kernel parameters
+3.	Allow the user to manually override and edit kernel image names and parameters (for example to enter single-user mode).
+4.	Provide support for booting order operating system.
+Boot loader details
+To understand how boot loaders like GRUB work, let first survey how a pc boots when you turn it on. Due to the repeated inadequacies of traditional PC boot mechanisms, there are several variation, but there are two main scheme: MBR and UEF
+
+MBR Boot
+In addition to the partition information described in section 4.1, the master boot record (MBR) includes a small area (441 bytes) that the pc Bios loads and executes after its power-on self- test (POST). Unfortunately, this is too little storage to house almost any boot loader, so additional space is necessary, resulting in what is sometimes called a multi-stage boot loader. 
+In this case the initial piece of code in the MBR does nothing other than load the rest of the boot loader code. The remaining piece of the boot loader are usually stuffed into the space between the MBR and the first partition on the disk.
+UEFI BOOT
+PC manufacturers and software companies realized that the traditional pc Bios is severally limited, so they decided to develop a replacement called extensible firmware interface (efi). Efi took a while to catch on for most pcs but now it’s fairly  common. The current standard is unified EFI (UEFI), which includes features such as a built-in shell and the ability to read partition table and navigate filesystems. The GPT partitioning scheme is part of the UEFI standard.
+
