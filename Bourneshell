@@ -1,0 +1,48 @@
+The bourne shell:/bin/sh
+The shell is one of the most important part of a unix  system . A shell is a program that run command, like the one that users enter. The shell also serves as a small programming environment. Unix programmers often break common tasks into little components and use the shell to manage task and piece things together.
+Many important parts of the system are shell scripts-text files that contain a sequence of shell command.
+There are many different unix shells, but all derive several of their feature from the Bourne shell(/bin/sh) a standard shell developed by bell labs for early version of unix. 
+The shell windows: after logging in , open a shell window (often referred to as a terminal)
+Standard input and standard output
+We’ll use cat to briefly explore unix input and output (I/O). Unix processes use I/O streams to read and write data. Processes read data from input streams and write data to output stream.
+Navigating Directories:
+Unix has directory hierarchy that start at /, sometimes called the root directory. 
+A path component identified by two dot(..) specifies the parent of a directory for example, if you are working in /usr/lib, the pathe.. would refer to /usr. Similarly .//bin wour refer to /usr/bin. 
+One dot (.) refer to the current directory. A path not beginning with / is call a relative path.
+Here are some essential directory command
+Cd
+The current working directory is the directory that a process is currently in. The cd command change the shell’s current working directory.
+Shell globing (wildcard) 
+The shell can match simple pattern to file and directory, a process known as globbing. The simplest of these is the glob character* which tells the shell to match any number of arbitrary characters.
+The shell matches arguments containing blobs to filenames, substitutes the filenames for those arguments, and then runs the revised command line. The substitute is called expansion because the shell substitutes all matching filenames.
+Environmental and shell variables
+The shell can store temporary variable, called shell variables, containing the values of text string shell variable are very useful for keeping track of values in scripts, and some shell variables control the way the shell behaves. To assign a value to a shell variable, use the equal sign (=). Example $STUFF=blah. This example set the value of the variable name STUFF to blah.
+The command path
+Path sis a special environment variable that contains the command path(or path for short). A command path is a list of system directories that the shell searches when trying to locate a command.
+Text Editor
+Speaking of editing. It is time to learn an Editor.
+Most part of the system use plaintext configuration files. Vi and Emacs, are standard unix text editor.
+
+Getting online Help
+Linux systems come with a wealth of documentation. For basic commands, the manual pages(or man pages) will tell you what you need to know . the output includes the manual page name, the manual section, and a quick description of what the manual page contain.
+
+Shell input and output
+Standard output
+To send the output of command to a file instead of the terminal, use the > redirection character.
+Understanding Error message
+When you encounter a problem on a unix -lie system such as linux, you must read the error message. Unix errors usually tell you exactly what went wrong.
+Segmentation fault, Buss error. 
+A segmentation fault essentially means that the person who wrote the program that you just ran screwed up somewhere.
+Killing process 
+To terminate a process, send it a signal with the kill command. A signal is a message to process from the kernel. When you run kill, you’re asking the kernel to send a signal to another process.
+
+Job Control.
+Shell also support job control, which is a way of send TSTP (similar to stop) and CONT signal to program by using various keystrokes and commands.
+
+Background process
+Normally, who you run a unix command from the shell, you don’t get the shell prompt back until the program finishes executing. However, you can detach a process from the shell and put it in the “background” with the ampersand (&); this gives you the prompt back.
+
+File Mod and permissions
+Every unix file has a set of permission that determine whether you can read, write, or run the file.
+Kernel location
+On linux system, the kernel is normally in/vm/linux or /boot/vm/linex. A boot loader loads this file into memory and set it in motion when the system boot. Once the boot loader runs and sets the kernel in motion, the main kernel file is no longer used by the running system.
