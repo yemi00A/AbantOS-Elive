@@ -1,0 +1,25 @@
+/sbin contains root user system utilities
+/sbin/init: Send control command to the init daemon
+/sbin/mkfs v: explain what is being done. 
+/Sbin/fsck: file system check, it is used to check and repair filesystem. 
+/sbin/mkswapc : check bad blocks before creating the swap area.
+/sbin/fdisk: to display partition. This command is a partition utility. 
+
+/bin/kill L :list all signal names in a nice tatble .
+/bin/ps  : time cmd
+/bin/gzip: compress data not written to a terminal.  
+/bin/cat: print message one type.   
+/bin/tar: tar Copy files to or restore files from an archive medium.
+C/usr/bin= most user programs are kept here.
+/usr/bin/find: determine where a binary command is stored /located on file
+/usr/bin/du: linux command for estimating file space usage/
+ /usr/bin/env:  is something you can count on., so you can count on a known location for the interpreter.
+/usr/bin/gpg: Asking for password
+/usr/sbin/useradd:  a command is a low-level utility that is used for adding/creating user accounts in Linux and other Unix-like operating systems. 
+
+/urs/sbin/lpd : The minimal setup for lpd results in a system that can queue files and print them. 
+usr/sbin/etc/qconfig: Queue configuration file
+usr/sbin
+
+
+
