@@ -1,0 +1,22 @@
+The Experimental repository
+
+Experimental isn’t a complete distribution. Experimental is a staging/collaboration/experimental area for development, when it is known that a package has problem or may have problems.
+To configure APT
+An /etc/apt/sources. List entry for experimental is:
+Deb  http://deb.debian.org/debian experimental main
+To install an experimental package, do:
+apt -get update
+apt-get -t experimental install packagename
+To upgrade an experimental package
+If the package has changed in experimental and you want to upgrade it, do:
+apt-get update
+apt-get -t experimental install package
+APT pinning
+Optionally, if you want to track a given package from experimental, add the following to /etc/apt/preferences:
+Package: dash
+Pin: release a=experimental
+Pin-priority:800
+Listing all packages installed from experimental 
+To check which experimental packages are currently installed on your system,
+do
+aptitude search ~s~i~Aexperimental
