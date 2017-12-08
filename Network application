@@ -1,0 +1,105 @@
+Chapter 10
+Anthony Ajewole (Tech ID: 00001438)
+Network Application and services
+Network clients use the operating system transport layer protocols and interfaces.
+10.1 
+The Basic of Service
+TCP service are among the easiest to understand because they are built upon simple, uninterrupted two-way data streams
+telnet is a program originally meant to enable login to remote services. telnet does not work with UDP or any transport layer other than TCP.
+$telnet www. Wikipedia.org 80 is the command to connect to a webserver.
+GET/HTTP/1.0
+One feature common to most network server is that they usually operate as multiple processes. At least one process-listens, on a network port, and when a new incoming connection is received, the listening processes uses fork () to create a new child process, which is then responsible for the new connection. The child, often called a worker process, terminates. When the connection is closed. Meanwhile, the original listening process continue to listen on the network port. This process allows a server to easily handle many connections without much trouble. 
+
+Secure shell (SSH)
+Every server works a bit different. Let’s take a close look at one-the standalone SSH server.
+One of the most common network service application is the secure shell (SSH); the de facto standard for remote access to a unix machine. When configured, SSH allows secure shell login, remote program execution, simple file sharing and more. 
+Most isps and cloud providers require SSH for shell access to their service, and many unix -based network appliances (such as NAS device) allows access via  SSH as well.
+
+SSH does the following
+1.	Encrypts your password and all other session data, protecting you from snoopers
+2.	Tunnels other network connections, including those from X window system clients, you’ll learn more about it later.
+3.	3 offers clients for nearly any operating system. 
+4.	Uses keys for host authentication
+Tunneling is the process of packaging and transporting one network connection using another one. The advantage of using SSH to tunnel and window system connections are that SSH sets up the display environment for you and encrypts the and data inside the tunnel.
+SSH does have its disadvantage. For one, in order to set up all SSH connections, you need the remote host’s public key, and you don’t necessarily get it in a secure was (though you can check it manually to make sure you’re not being spoofed)
+The SSHD Server
+Running sshd requires a configuration files and hoot keys. Most distributions keep configuration in the /etc/ssh 
+Configuration directory and try to configure everything properly for you if you install their sshd package. You shouldn’t need to change anything in sshd_config.
+
+Host Keys
+Open SSH has three host key sets: one for protocol version 1 and two for protocol 2. Each set has a public key (with a pub file extension and a private key (with no extension). Don’t let anyone set your private key, even on your own system, because if someone obtain it, you’re at risk from intruders.
+SSH Version 1 has RSA keys only, and SSH version 2 has RSA and DSA  keys. RSA and DSA  are public key cryptography algorithms.
+
+Normally you won’t need to build the keys because the open SSH installation program or your distribution’s installation script will do it for you, but you do need to know how to create keys it you plan to use programs like ssh-agent. To create SSH protocol version 2 keys, use the ssh-keypen, program that comes with open SSH.
+#ssh-keypen -t  ras -N 1 -f /etc/ssh/ssh-host-rsa_key
+#ssh -keypen -t dsa -N” -f /etc/ssh/ssh _host _dsa_key.
+
+The SSH Server and clients also use a key file called ssh _known-hosts file must contain the public host keys of all trusted clients.
+Starting the SSH Server
+Although most distributions ship with ssh, they usually don’t start the sshd server by default. On ubuntu and Debian, installing the SSH server package creates the keys, starts the server, and adds the startup to the bootup configuration. 
+To start sshd at boot, use chkconfig like this (this won’t start the server immediately, use service sshd start for that).
+# chkconfig sshd on
+
+The SSH Client
+To log in to a remote host, run
+$ssh remote_username@host
+
+SSH File transfer clients
+Open SSH includes the file transfer programs scp and sftp, which are intended as replacements for the older, insecure programs rcp and ftp
+You can use Scp to transfer files to or from a remote machine to your machine or from one host to another. It works like the cp command 
+Example: $ scp user@host:file
+
+Diagnostic Tools
+Let’s look at a few diagnostic tools that are useful for poking around the application layer.
+Netstat is a basic network service debugging tool that can display a number of transport and network layer statistics.
+
+Useful connection- Reporting options for netstat
+Options                                                            Description
+-t                                                                       print TCP port information
+-u                                                                     print UDP port information
+-l                                                                      prints listening ports
+-a                                                                    prints every active port
+-n                                                                   Disable name lookup (speed things up, also if DNS isn’t working.
+
+#lsof -I                                                          list a complete program using or listening to ports.
+
+The lsof program is like netstat in that it tries to reverse resolve every ip address that is find into a hostname, which slow down the output. Use the -n option to disable name resolution,
+#lsof -n -i
+You can also specify -p to disable /etc/services port name lookups.
+
+Filtering by protocol and port
+If you’re looking for a port (say, you know that a process is using a particular port and you want to know what that process is), use this command:
+#lsof -I: port
+The full syntax is as follws
+#lsof -ipprotocol@host:port
+
+If you want to see connections on TCP Port 80 (the HTTP port), use
+#lsof – Itcp: Port 80
+
+
+Filtering by connection status
+One particularly handy lsof filter is connection status. For example, to show only the processes listening on TCP port, enter
+#lsof -Itcp -Stcp: LISTEN
+
+Network Security
+Network security attract extremist 
+
+Here are a few basic rules of thumb to keep the system safe.
+1.	Run a few services as possible: intruder can’t break into services that don’t exist on your system.
+2.	Black as much as possible with a firewall
+3.	Track the services that you offer to the interest
+4.	Use “long-term support” distribution release for server
+Socket: How processes communicate with the Network
+On unix systems, a process uses a socket to identify when and how it’s talking to the network. Sockets are the interface that processes use to access the network through the kernel; they represent the boundary between user space and kernel space. They ‘re often also used for interprocess communication (ipc)
+
+Unix Domain sockets
+Applications that use network facility don’t have to involve two separate hosts. Many applications are built as client-server or peer -to-peer mechanisms, where processes running on the same machine use interprocess communication (ipc) to negotiate what work need, to be done and who does it.
+For example, daemons such as system and network manager use D-Bus to monitor and react to system events.
+Processes can use regular ip networking over local host (127.0.0.1) to communicate but instead, typically use a special kind at socket, called Unix domain socket.
+Introduction to shell scripts
+Shell script Basics
+Bourne shell script generally start with the following line, which indicates that the /bin/sh program should execute the commands in the script file. (make sure no white space appears at the beginning of the script file.  #! /bin/sh.
+The #! Part is called a shebang, you’ll see it in other scripts in this book. You can list any commands that you want the shell to execute following the #! /bin/sh
+
+Schmod+IX script
+This Chmod command allows others user to read and execute Script.
